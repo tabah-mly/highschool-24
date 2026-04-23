@@ -5,6 +5,7 @@ class PlayerBase:
     def initialize(self, x, y):
         self.state = "idle"
         self.facing_right = True
+        self.is_run = False
         self.animator = self.animations[self.state]
         self.pos = pygame.Vector2(x, y)
         self.rect = self.animator.image.get_rect(center=(x, y))
@@ -27,6 +28,14 @@ class PlayerBase:
         player_rect = camera.apply(self.rect)
         screen.blit(image, player_rect)
 
+    def check_run(self, keys, run_speed, walk_speed):
+        if keys[pygame.K_LSHIFT]:
+            self.stats["speed"] = run_speed
+            self.is_run = True
+        else:
+            self.stats["speed"] = walk_speed
+            self.is_run = False
+
     def move(self, direction, dt):
         if direction.length_squared() > 0:
             direction = direction.normalize()
@@ -38,6 +47,6 @@ class PlayerBase:
 
             self.pos += direction * self.stats["speed"] * dt
             self.rect.center = self.pos
-            self.set_state("run" if self.stats["speed"] > 200 else "walk")
+            self.set_state("run" if self.is_run else "walk")
         else:
             self.set_state("idle")
