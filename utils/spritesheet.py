@@ -49,3 +49,19 @@ class SpriteSheet:
         self.frame_index = 0
         self.timer = 0
         self.image = self.frames[0]
+
+    def copy(self):
+        new = SpriteSheet.__new__(SpriteSheet)
+
+        new.sheet = self.sheet
+        new.frames = self.frames
+        new.masks = self.masks
+
+        new.speed = self.speed
+        new.scale = self.scale
+
+        new.frame_index = 0
+        new.timer = 0
+        new.image = new.frames[0]
+
+        return new

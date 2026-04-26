@@ -1,8 +1,26 @@
 import pygame
 
+from utils.spritesheet import SpriteSheet
+
 
 class EnemyBase:
+    shared_animations = None
+
     def initialize(self, x, y, player):
+        if EnemyBase.shared_animations is None:
+            _anim_temp = {}
+            for key in self.animations:
+                _anim_temp[key] = SpriteSheet(
+                    self.animations[key][0],
+                    self.animations[key][1],
+                    self.animations[key][2],
+                )
+            EnemyBase.shared_animations = _anim_temp
+
+        self.animations = {
+            key: anim.copy() for key, anim in EnemyBase.shared_animations.items()
+        }
+
         self.player = player
         self.state = "idle"
         self.facing_right = True
