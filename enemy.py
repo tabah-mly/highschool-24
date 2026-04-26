@@ -16,11 +16,14 @@ class Enemy(EnemyBase):
             "hp": 100,
             "speed": 100,
             "damage": 20,
+            "attack_cooldown": 1.0,
         }
 
         self.initialize(x, y, player)
 
     def update(self, dt):
+        self.get_target_x()
+        # if not self.attack(dt):
         self.move(dt)
         self.update_sprites(dt)
 

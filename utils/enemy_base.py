@@ -10,7 +10,10 @@ class EnemyBase:
         self.animator = self.animations[self.state]
         self.pos = pygame.Vector2(x, y)
         self.rect = self.animator.image.get_rect(center=(x, y))
-        self.offset = 150
+        self.chase_offset = 150
+        self.attack_range = 30
+        self.attack_timer = 0
+        self.attacking = False
 
     def set_state(self, state):
         if state != self.state:
@@ -18,15 +21,36 @@ class EnemyBase:
             self.animator = self.animations[state]
             self.animator.reset()
 
-    def move(self, dt):
-        self.facing_right = (self.player.rect.centerx - self.rect.centerx) > 0
-
+    def get_target_x(self):
+        self.facing_right = self.player.rect.centerx - self.rect.centerx > 0
         if self.facing_right:
-            target_x = self.player.rect.centerx - self.offset
+            self.target_x = self.player.rect.centerx - self.chase_offset
         else:
-            target_x = self.player.rect.centerx + self.offset
+            self.target_x = self.player.rect.centerx + self.chase_offset
 
-        distance_to_target = target_x - self.rect.centerx
+    def attack(self, dt):
+        distance = abs(self.target_x - self.rect.centerx)
+
+        if self.attack_timer > 0:
+            self.attack_timer -= dt
+
+        if self.state == "attack":
+            if distance > self.attack_range:
+                self.attacking = False
+                self.set_state("idle")
+                return False
+            return True
+
+        if distance <= self.attack_range and self.attack_timer <= 0:
+            self.attacking = True
+            self.attack_timer = self.stats["attack_cooldown"]
+            self.set_state("attack")
+            return True
+
+        return False
+
+    def move(self, dt):
+        distance_to_target = self.target_x - self.rect.centerx
         self.moving = abs(distance_to_target) > 1
 
         if self.moving:
