@@ -7,7 +7,7 @@ class GameBase:
     def initialize(self):
         pygame.init()
         pygame.display.set_caption(self.screen_title)
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), display=1)
         self.clock = pygame.time.Clock()
 
         self.background = InfiniteBackground(self.bg_path, screen_height=self.screen_height)

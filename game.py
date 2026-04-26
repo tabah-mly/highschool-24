@@ -15,7 +15,7 @@ class Game(GameBase):
         self.initialize()
 
         self.player = Player(self.screen_width // 2, 450)
-        self.enemy = Enemy((self.screen_width // 2) + 100, 420, self.player)
+        self.enemy = Enemy((self.screen_width // 2) + 300, 420, self.player)
 
     def event_listener(self):
         for event in pygame.event.get():

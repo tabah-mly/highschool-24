@@ -14,7 +14,7 @@ class Enemy(EnemyBase):
         self.stats = {
             "max_hp": 100,
             "hp": 100,
-            "speed": 200,
+            "speed": 100,
             "damage": 20,
         }
 
