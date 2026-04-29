@@ -37,6 +37,9 @@ class PlayerBase:
             self.is_run = False
 
     def move(self, direction, dt):
+        if self.state == "attack":
+            return
+        
         if direction.length_squared() > 0:
             direction = direction.normalize()
 

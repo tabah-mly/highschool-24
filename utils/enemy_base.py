@@ -1,5 +1,4 @@
-import pygame
-
+import pygame, random
 from utils.spritesheet import SpriteSheet
 
 
@@ -29,7 +28,7 @@ class EnemyBase:
         self.pos = pygame.Vector2(x, y)
         self.rect = self.animator.image.get_rect(center=(x, y))
         self.chase_offset = 150
-        self.attack_range = 30
+        self.attack_range = random.randint(10, 100)
         self.attack_timer = 0
         self.attacking = False
 

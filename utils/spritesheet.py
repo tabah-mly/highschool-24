@@ -2,9 +2,11 @@ import pygame
 
 
 class SpriteSheet:
-    def __init__(self, sheet_path, scale=5, speed=0.2):
+    def __init__(self, sheet_path, scale=5, speed=0.2, loop=True):
         self.speed = speed
         self.scale = scale
+        self.loop = loop
+        self.finished = False
 
         self.sheet = pygame.image.load(sheet_path).convert_alpha()
         self.sheet_width, self.sheet_height = self.sheet.get_size()
@@ -39,16 +41,28 @@ class SpriteSheet:
             self.frames.append(frame)
 
     def update(self, dt):
+        if self.finished:
+            return
+
         self.timer += dt
         if self.timer >= self.speed:
             self.timer -= self.speed
-            self.frame_index = (self.frame_index + 1) % len(self.frames)
+
+            if self.frame_index < len(self.frames) - 1:
+                self.frame_index += 1
+            else:
+                if self.loop:
+                    self.frame_index = 0
+                else:
+                    self.finished = True
+
             self.image = self.frames[self.frame_index]
 
     def reset(self):
         self.frame_index = 0
         self.timer = 0
         self.image = self.frames[0]
+        self.finished = False
 
     def copy(self):
         new = SpriteSheet.__new__(SpriteSheet)
@@ -59,9 +73,11 @@ class SpriteSheet:
 
         new.speed = self.speed
         new.scale = self.scale
+        new.loop = self.loop
 
         new.frame_index = 0
         new.timer = 0
         new.image = new.frames[0]
+        new.finished = False
 
         return new
