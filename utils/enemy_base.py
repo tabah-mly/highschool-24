@@ -32,6 +32,8 @@ class EnemyBase:
         self.attack_timer = 0
         self.attacking = False
 
+        self.font = pygame.font.Font("assets/fonts/monogram.ttf", 60)
+
     def set_state(self, state):
         if state != self.state:
             self.state = state
@@ -95,5 +97,9 @@ class EnemyBase:
         if not self.facing_right:
             image = pygame.transform.flip(image, True, False)
 
-        player_rect = camera.apply(self.rect)
-        screen.blit(image, player_rect)
+        rect = camera.apply(self.rect)
+        screen.blit(image, rect)
+
+        text_surface = self.font.render(f"{self.stats['hp']}", True, (255, 0, 0))
+        text_rect = text_surface.get_rect(center=(rect.x + 300, rect.y))
+        screen.blit(text_surface, text_rect)

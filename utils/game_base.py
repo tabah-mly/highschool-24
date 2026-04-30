@@ -21,7 +21,7 @@ class GameBase:
         self.running = True
 
         self.enemies = []
-        self.max_enemies = 10
+        self.max_enemies = 1
         self.spawn_interval = 2
         self.spawn_timer = 0
 
