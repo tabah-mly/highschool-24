@@ -9,10 +9,12 @@ class EnemyBase:
         if EnemyBase.shared_animations is None:
             _anim_temp = {}
             for key in self.animations:
+                _is_loop = True if len(self.animations[key]) < 4 else False
                 _anim_temp[key] = SpriteSheet(
                     self.animations[key][0],
                     self.animations[key][1],
                     self.animations[key][2],
+                    _is_loop,
                 )
             EnemyBase.shared_animations = _anim_temp
 
@@ -27,12 +29,40 @@ class EnemyBase:
         self.animator = self.animations[self.state]
         self.pos = pygame.Vector2(x, y)
         self.rect = self.animator.image.get_rect(center=(x, y))
-        self.chase_offset = 150
+        self.hurtbox = pygame.Rect(0, 0, 120, 250)
+        self.hurtbox.center = self.rect.center
+        self.chase_offset = 120
         self.attack_range = random.randint(10, 100)
         self.attack_timer = 0
-        self.attacking = False
-
+        self.has_hit = False
+        self.dead = False
+        self.debug = False
         self.font = pygame.font.Font("assets/fonts/monogram.ttf", 60)
+
+    def take_damage(self, amount):
+        self.stats["hp"] -= amount
+        if self.stats["hp"] <= 0:
+            self.dead = True
+
+    def get_hitbox(self):
+        width = 200
+        height = 200
+        x_offset = -280
+        y_offset = 10
+
+        y = self.rect.centery - (height // 2) + y_offset
+        if self.facing_right:
+            x = self.rect.right + x_offset
+        else:
+            x = self.rect.left - width - x_offset
+
+        return pygame.Rect(x, y, width, height)
+
+    def do_damage(self):
+        attack_rect = self.get_hitbox()
+
+        if attack_rect.colliderect(self.player.hurtbox):
+            self.player.take_damage(self.stats["damage"])
 
     def set_state(self, state):
         if state != self.state:
@@ -55,14 +85,20 @@ class EnemyBase:
 
         if self.state == "attack":
             if distance > self.attack_range:
-                self.attacking = False
                 self.set_state("idle")
-                return False
+                return
+
+            if not self.has_hit and self.animator.frame_index == 4:
+                self.do_damage()
+                self.has_hit = True
+
+            if self.animator.finished:
+                self.set_state("idle")
             return True
 
         if distance <= self.attack_range and self.attack_timer <= 0:
-            self.attacking = True
             self.attack_timer = self.stats["attack_cooldown"]
+            self.has_hit = False
             self.set_state("attack")
             return True
 
@@ -87,6 +123,7 @@ class EnemyBase:
             self.set_state("idle")
 
         self.rect.center = self.pos
+        self.hurtbox.center = self.rect.center
 
     def update_sprites(self, dt):
         self.animator.update(dt)
@@ -100,6 +137,10 @@ class EnemyBase:
         rect = camera.apply(self.rect)
         screen.blit(image, rect)
 
-        text_surface = self.font.render(f"{self.stats['hp']}", True, (255, 0, 0))
-        text_rect = text_surface.get_rect(center=(rect.x + 300, rect.y))
-        screen.blit(text_surface, text_rect)
+        if self.debug:
+            text_surface = self.font.render(f"{self.stats['hp']}", True, (255, 0, 0))
+            text_rect = text_surface.get_rect(center=(rect.x + 300, rect.y))
+            screen.blit(text_surface, text_rect)
+            pygame.draw.rect(screen, (0, 255, 0), rect, 2)
+            pygame.draw.rect(screen, (255, 0, 0), camera.apply(self.get_hitbox()), 2)
+            pygame.draw.rect(screen, (0, 0, 255), camera.apply(self.hurtbox), 2)

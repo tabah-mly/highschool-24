@@ -23,6 +23,7 @@ class Game(GameBase):
 
     def update(self):
         self.player.update(self.dt)
+        self.player.handle_attack(self.enemies)
         self.camera.follow(self.player.rect)
         self.update_enemies()
 

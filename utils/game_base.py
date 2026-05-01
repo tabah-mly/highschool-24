@@ -21,7 +21,7 @@ class GameBase:
         self.running = True
 
         self.enemies = []
-        self.max_enemies = 1
+        self.max_enemies = 3
         self.spawn_interval = 2
         self.spawn_timer = 0
 
@@ -35,6 +35,8 @@ class GameBase:
         self.enemies.append(enemy)
 
     def update_enemies(self):
+        self.enemies = [e for e in self.enemies if not e.dead]
+        
         if len(self.enemies) < self.max_enemies:
             self.spawn_timer -= self.dt
             if self.spawn_timer <= 0:

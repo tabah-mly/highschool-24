@@ -7,7 +7,7 @@ class Enemy(EnemyBase):
         self.animations = {
             "idle": ("assets/imgs/enemy_idle.png", 4, 0.1),
             "walk": ("assets/imgs/enemy_walk.png", 4, 0.1),
-            "attack": ("assets/imgs/enemy_attack.png", 4, 0.07),
+            "attack": ("assets/imgs/enemy_attack.png", 4, 0.07, False),
         }
 
         self.stats = {

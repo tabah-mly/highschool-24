@@ -21,21 +21,11 @@ class Player(PlayerBase):
 
         self.initialize(x, y)
 
-    def handle_attack(self, dt):
-        mouse_pressed = pygame.mouse.get_pressed()[0]
-
-        if mouse_pressed and self.state != "attack":
-            self.set_state("attack")
-
-        if self.state == "attack" and self.animator.finished:
-            self.set_state("idle")
-
     def handle_input(self, dt):
         keys = pygame.key.get_pressed()
         direction = pygame.Vector2(keys[pygame.K_d] - keys[pygame.K_a], 0)
         self.check_run(keys, 400, 200)
         self.move(direction, dt)
-        self.handle_attack(dt)
 
     def update(self, dt):
         self.handle_input(dt)
