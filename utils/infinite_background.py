@@ -22,6 +22,8 @@ class InfiniteBackground:
         self.index_x = 0
         self.index_y = 0
 
+        self.debug = False
+
     def draw(self, surface, camera_offset):
         screen_w, screen_h = surface.get_size()
 
@@ -45,3 +47,8 @@ class InfiniteBackground:
                 pos_x = x * self.w - camera_offset.x
                 pos_y = y * self.h - camera_offset.y
                 surface.blit(self.image, (pos_x, pos_y))
+
+                if self.debug:
+                    pygame.draw.line(
+                        surface, (255, 0, 0), (pos_x, pos_y), (pos_x, pos_y + self.h), 2
+                    )
