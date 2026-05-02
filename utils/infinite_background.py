@@ -19,6 +19,9 @@ class InfiniteBackground:
         self.repeat_x = repeat_x
         self.repeat_y = repeat_y
 
+        self.index_x = 0
+        self.index_y = 0
+
     def draw(self, surface, camera_offset):
         screen_w, screen_h = surface.get_size()
 
@@ -33,6 +36,9 @@ class InfiniteBackground:
             end_y = start_y + screen_h // self.h + 3
         else:
             start_y = end_y = 0
+
+        self.index_x = camera_offset.x / self.w
+        self.index_y = camera_offset.y / self.h
 
         for x in range(start_x, end_x + 1):
             for y in range(start_y, end_y + 1):
