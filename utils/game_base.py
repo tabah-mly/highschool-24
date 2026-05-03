@@ -1,5 +1,6 @@
 import pygame, random
 from enemy import Enemy
+from utils.finish import Finish
 from utils.infinite_background import InfiniteBackground
 from utils.camera import Camera
 
@@ -24,6 +25,11 @@ class GameBase:
         self.max_enemies = 3
         self.spawn_interval = 2
         self.spawn_timer = 0
+
+        self.arena = 5000
+
+        self.finish_right = Finish(self.screen_height, self.arena)
+        self.finish_left = Finish(self.screen_height, -self.arena)
 
         self.font = pygame.font.Font("assets/fonts/monogram.ttf", 40)
 
@@ -55,3 +61,22 @@ class GameBase:
     def debug_text(self, text, pos):
         text_surface = self.font.render(text, True, (255, 255, 255))
         self.screen.blit(text_surface, pos)
+
+    def update_finish(self):
+        self.finish_right.update()
+        self.finish_left.update()
+
+        is_finish_right = self.finish_right.is_finish(self.player)
+        is_finish_left = self.finish_left.is_finish(self.player)
+
+        if is_finish_right or is_finish_left:
+            print("Finish!")
+
+    def draw_finish(self):
+        self.finish_right.draw(self.screen, self.camera)
+        self.finish_left.draw(self.screen, self.camera)
+
+    def debug_show(self):
+        self.debug_text(f"Finish Right pos: {self.finish_right.finish_rect}", (20, 10))
+        self.debug_text(f"Finish Left pos: {self.finish_left.finish_rect}", (20, 40))
+        self.debug_text(f"Player pos: {self.player.pos}", (20, 70))

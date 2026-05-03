@@ -1,7 +1,6 @@
 import pygame, sys
 from utils.game_base import GameBase
 from player import Player
-from enemy import Enemy
 
 
 class Game(GameBase):
@@ -14,7 +13,7 @@ class Game(GameBase):
 
         self.initialize()
 
-        self.player = Player(self.screen_width // 2, 450)
+        self.player = Player(0, 450)
 
     def event_listener(self):
         for event in pygame.event.get():
@@ -26,11 +25,13 @@ class Game(GameBase):
         self.player.handle_attack(self.enemies)
         self.camera.follow(self.player.rect)
         self.update_enemies()
+        self.update_finish()
 
     def draw(self):
         self.background.draw(self.screen, self.camera.offset)
         self.player.draw(self.screen, self.camera)
         self.draw_enemies()
+        self.draw_finish()
 
     def start(self):
         while self.running:
