@@ -15,7 +15,8 @@ class Player(PlayerBase):
         self.stats = {
             "max_hp": 100,
             "hp": 100,
-            "speed": 200,
+            "walk": 200,
+            "run": 400,
             "damage": 20,
         }
 
@@ -24,8 +25,7 @@ class Player(PlayerBase):
     def handle_input(self, dt):
         keys = pygame.key.get_pressed()
         direction = pygame.Vector2(keys[pygame.K_d] - keys[pygame.K_a], 0)
-        self.check_run(keys, 400, 200)
-        self.move(direction, dt)
+        self.move(keys, direction, dt)
 
     def update(self, dt):
         self.handle_input(dt)

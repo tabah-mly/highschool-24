@@ -14,6 +14,7 @@ class PlayerBase:
         self.has_hit = False
         self.dead = False
         self.debug = False
+        self.speed = 0
         self.font = pygame.font.Font("assets/fonts/monogram.ttf", 60)
 
     def take_damage(self, amount):
@@ -83,15 +84,16 @@ class PlayerBase:
             pygame.draw.rect(screen, (255, 0, 0), camera.apply(self.get_hitbox()), 2)
             pygame.draw.rect(screen, (0, 0, 255), camera.apply(self.hurtbox), 2)
 
-    def check_run(self, keys, run_speed, walk_speed):
+    def check_run(self, keys):
         if keys[pygame.K_LSHIFT]:
-            self.stats["speed"] = run_speed
+            self.speed = self.stats["run"]
             self.is_run = True
         else:
-            self.stats["speed"] = walk_speed
+            self.speed = self.stats["walk"]
             self.is_run = False
 
-    def move(self, direction, dt):
+    def move(self, keys, direction, dt):
+        self.check_run(keys)
         if self.state == "attack":
             return
 
@@ -103,7 +105,7 @@ class PlayerBase:
             else:
                 self.facing_right = True
 
-            self.pos += direction * self.stats["speed"] * dt
+            self.pos += direction * self.speed * dt
             self.rect.center = self.pos
             self.hurtbox.center = self.rect.center
             self.set_state("run" if self.is_run else "walk")
