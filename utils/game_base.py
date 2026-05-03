@@ -25,6 +25,8 @@ class GameBase:
         self.spawn_interval = 2
         self.spawn_timer = 0
 
+        self.font = pygame.font.Font("assets/fonts/monogram.ttf", 40)
+
     def set_fps(self, frame=60):
         dt_raw = self.clock.tick(frame) / 1000
         self.dt = min(dt_raw, 0.05)
@@ -36,7 +38,7 @@ class GameBase:
 
     def update_enemies(self):
         self.enemies = [e for e in self.enemies if not e.dead]
-        
+
         if len(self.enemies) < self.max_enemies:
             self.spawn_timer -= self.dt
             if self.spawn_timer <= 0:
@@ -49,3 +51,7 @@ class GameBase:
     def draw_enemies(self):
         for enemy in self.enemies:
             enemy.draw(self.screen, self.camera)
+
+    def debug_text(self, text, pos):
+        text_surface = self.font.render(text, True, (255, 255, 255))
+        self.screen.blit(text_surface, pos)
