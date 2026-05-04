@@ -15,10 +15,10 @@ class GameBase:
         )
         self.clock = pygame.time.Clock()
 
-        self.background = InfiniteBackground(
-            self.bg_path, screen_height=self.screen_height
-        )
         self.camera = Camera(self.screen_width, self.screen_height)
+        self.background = InfiniteBackground(
+            self.bg_path, self.screen, self.camera, screen_height=self.screen_height
+        )
 
         self.running = True
 

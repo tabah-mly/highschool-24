@@ -31,7 +31,7 @@ class Game(GameBase):
         self.update_enemies()
 
     def draw(self):
-        self.background.draw(self.screen, self.camera.offset)
+        self.background.draw()
         self.player.draw(self.screen, self.camera)
         self.draw_enemies()
         self.draw_game()
