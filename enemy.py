@@ -14,7 +14,7 @@ class Enemy(EnemyBase):
             "max_hp": 100,
             "hp": 100,
             "speed": 120,
-            "damage": 20,
+            "damage": 5,
             "attack_cooldown": 1.0,
         }
 

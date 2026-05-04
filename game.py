@@ -21,6 +21,8 @@ class Game(GameBase):
                 self.running = False
 
     def update(self):
+        if self.is_finish:
+            return
         self.player.update(self.dt)
         self.player.handle_attack(self.enemies)
         self.camera.follow(self.player.rect)
@@ -32,6 +34,7 @@ class Game(GameBase):
         self.player.draw(self.screen, self.camera)
         self.draw_enemies()
         self.draw_finish()
+        self.draw_ui()
 
     def start(self):
         while self.running:

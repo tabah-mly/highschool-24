@@ -26,8 +26,9 @@ class GameBase:
         self.spawn_interval = 2
         self.spawn_timer = 0
 
-        self.arena = 5000
+        self.arena = 500
 
+        self.is_finish = False
         self.finish_right = Finish(self.screen_height, self.arena)
         self.finish_left = Finish(self.screen_height, -self.arena)
 
@@ -69,8 +70,7 @@ class GameBase:
         is_finish_right = self.finish_right.is_finish(self.player)
         is_finish_left = self.finish_left.is_finish(self.player)
 
-        if is_finish_right or is_finish_left:
-            print("Finish!")
+        self.is_finish = is_finish_right or is_finish_left
 
     def draw_finish(self):
         self.finish_right.draw(self.screen, self.camera)
@@ -80,3 +80,31 @@ class GameBase:
         self.debug_text(f"Finish Right pos: {self.finish_right.finish_rect}", (20, 10))
         self.debug_text(f"Finish Left pos: {self.finish_left.finish_rect}", (20, 40))
         self.debug_text(f"Player pos: {self.player.pos}", (20, 70))
+
+    def draw_player_hp(self):
+        hp_x, hp_y = 20, 20
+        hp_w, hp_h = (self.screen_width // 3) - (hp_x * 2), 20
+
+        pygame.draw.rect(
+            self.screen,
+            (135, 0, 0),
+            (hp_x, hp_y, hp_w * (self.player.stats["max_hp"] / 100), hp_h),
+        )
+        pygame.draw.rect(
+            self.screen,
+            (228, 13, 0),
+            (hp_x, hp_y, hp_w * (self.player.stats["hp"] / 100), hp_h),
+        )
+
+    def draw_finish_screen(self):
+        text_surface = self.font.render("Finish!", True, (255, 255, 255))
+        text_rect = text_surface.get_rect(
+            center=(self.screen_width // 2, self.screen_height // 2)
+        )
+        self.screen.blit(text_surface, text_rect)
+
+    def draw_ui(self):
+        if self.is_finish:
+            self.draw_finish_screen()
+        else:
+            self.draw_player_hp()

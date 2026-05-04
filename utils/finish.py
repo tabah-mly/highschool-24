@@ -15,8 +15,6 @@ class Finish:
         self.w = self.image.get_width()
         self.h = self.image.get_height()
 
-        self.offset = self.w // 2
-
         self.finish_rect = pygame.Rect(0, 0, 300, self.h * 0.8)
 
         self.debug = False
@@ -26,6 +24,10 @@ class Finish:
             pos_x -= self.w
             self.image = pygame.transform.flip(self.image, True, False)
         self.pos = (pos_x, 0)
+
+        self.offset = self.w // (1.5 if self.on_right else 2.5)
+
+        self.font = pygame.font.Font("assets/fonts/monogram.ttf", 40)
 
     def update(self):
         self.finish_rect.centerx = self.pos[0] + self.offset
