@@ -16,6 +16,7 @@ class PlayerBase:
         self.debug = False
         self.speed = 0
         self.font = pygame.font.Font("assets/fonts/monogram.ttf", 60)
+        self.attack_clicked = False
 
     def take_damage(self, amount):
         self.stats["hp"] -= amount
@@ -44,7 +45,8 @@ class PlayerBase:
                 enemy.take_damage(self.stats["damage"])
 
     def handle_attack(self, enemies):
-        mouse_pressed = pygame.mouse.get_pressed()[0]
+        mouse_pressed = self.attack_clicked
+        self.attack_clicked = False
 
         if mouse_pressed and self.state != "attack":
             self.set_state("attack")

@@ -25,7 +25,7 @@ class Finish:
             self.image = pygame.transform.flip(self.image, True, False)
         self.pos = (pos_x, 0)
 
-        self.offset = self.w // (1.5 if self.on_right else 2.5)
+        self.offset = self.w // 2
 
         self.font = pygame.font.Font("assets/fonts/monogram.ttf", 40)
 

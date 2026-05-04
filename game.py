@@ -19,22 +19,22 @@ class Game(GameBase):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            self.listen(event)
 
     def update(self):
-        if self.is_finish:
+        self.update_game()
+        if self.game_finish:
             return
         self.player.update(self.dt)
         self.player.handle_attack(self.enemies)
         self.camera.follow(self.player.rect)
         self.update_enemies()
-        self.update_finish()
 
     def draw(self):
         self.background.draw(self.screen, self.camera.offset)
         self.player.draw(self.screen, self.camera)
         self.draw_enemies()
-        self.draw_finish()
-        self.draw_ui()
+        self.draw_game()
 
     def start(self):
         while self.running:

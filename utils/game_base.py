@@ -3,6 +3,7 @@ from enemy import Enemy
 from utils.finish import Finish
 from utils.infinite_background import InfiniteBackground
 from utils.camera import Camera
+from utils.game_over import GameOver
 
 
 class GameBase:
@@ -28,11 +29,13 @@ class GameBase:
 
         self.arena = 500
 
-        self.is_finish = False
+        self.game_finish = False
         self.finish_right = Finish(self.screen_height, self.arena)
         self.finish_left = Finish(self.screen_height, -self.arena)
 
         self.font = pygame.font.Font("assets/fonts/monogram.ttf", 40)
+
+        self.game_over = GameOver(self.screen_width, self.screen_height)
 
     def set_fps(self, frame=60):
         dt_raw = self.clock.tick(frame) / 1000
@@ -70,7 +73,8 @@ class GameBase:
         is_finish_right = self.finish_right.is_finish(self.player)
         is_finish_left = self.finish_left.is_finish(self.player)
 
-        self.is_finish = is_finish_right or is_finish_left
+        if is_finish_right or is_finish_left:
+            self.game_finish = "win"
 
     def draw_finish(self):
         self.finish_right.draw(self.screen, self.camera)
@@ -104,7 +108,30 @@ class GameBase:
         self.screen.blit(text_surface, text_rect)
 
     def draw_ui(self):
-        if self.is_finish:
-            self.draw_finish_screen()
-        else:
-            self.draw_player_hp()
+        self.draw_player_hp()
+
+    def restart(self):
+        self.__init__(self.screen_width, self.screen_height, self.screen_title)
+
+    def listen(self, event):
+        restarted = self.game_over.handle_event(event)
+        if restarted:
+            self.restart()
+            return
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                self.player.attack_clicked = True
+
+    def update_game(self):
+        self.update_finish()
+        if self.player.stats["hp"] <= 0:
+            self.game_finish = "lose"
+        if self.game_finish:
+            self.game_over.update(self.dt)
+
+    def draw_game(self):
+        self.draw_finish()
+        self.draw_ui()
+        if self.game_finish:
+            self.game_over.draw(self.screen, self.game_finish.capitalize())
