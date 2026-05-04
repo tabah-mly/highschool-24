@@ -14,7 +14,7 @@ class Enemy(EnemyBase):
             "max_hp": 100,
             "hp": 100,
             "speed": 200,
-            "damage": 25,
+            "damage": 10,
         }
 
         self.initialize(x, y, player)
