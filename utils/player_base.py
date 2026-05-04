@@ -9,7 +9,7 @@ class PlayerBase:
         self.animator = self.animations[self.state]
         self.pos = pygame.Vector2(x, y)
         self.rect = self.animator.image.get_rect(center=(x, y))
-        self.hurtbox = pygame.Rect(0, 0, 70, 200)
+        self.hurtbox = pygame.Rect(0, 0, 100, 200)
         self.hurtbox.center = self.rect.center
         self.has_hit = False
         self.dead = False

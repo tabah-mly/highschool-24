@@ -23,11 +23,11 @@ class GameBase:
         self.running = True
 
         self.enemies = []
-        self.max_enemies = 3
-        self.spawn_interval = 2
+        self.max_enemies = 1
+        self.spawn_interval = 1
         self.spawn_timer = 0
 
-        self.arena = 500
+        self.arena = 5000
 
         self.game_finish = False
         self.finish_right = Finish(self.screen_height, self.arena)
@@ -42,7 +42,13 @@ class GameBase:
         self.dt = min(dt_raw, 0.05)
 
     def spawn_enemy(self):
-        spawn_x = self.camera.offset.x + self.screen_width + random.randint(300, 600)
+        side = random.choice(["left", "right"])
+
+        if side == "left":
+            spawn_x = self.player.pos.x - random.randint(100, 300)
+        else:
+            spawn_x = self.player.pos.x + random.randint(100, 300)
+
         enemy = Enemy(spawn_x, 420, self.player)
         self.enemies.append(enemy)
 

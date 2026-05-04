@@ -17,7 +17,7 @@ class Player(PlayerBase):
             "hp": 100,
             "walk": 200,
             "run": 400,
-            "damage": 20,
+            "damage": 100,
         }
 
         self.initialize(x, y)

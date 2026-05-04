@@ -32,12 +32,13 @@ class EnemyBase:
         self.hurtbox = pygame.Rect(0, 0, 120, 250)
         self.hurtbox.center = self.rect.center
         self.chase_offset = 120
-        self.attack_range = random.randint(10, 100)
+        self.attack_range = random.randint(50, 150)
         self.attack_timer = 0
         self.has_hit = False
         self.dead = False
         self.debug = False
         self.font = pygame.font.Font("assets/fonts/monogram.ttf", 60)
+        self.attack_cooldown = 0.5
 
     def take_damage(self, amount):
         self.stats["hp"] -= amount
@@ -97,7 +98,7 @@ class EnemyBase:
             return True
 
         if distance <= self.attack_range and self.attack_timer <= 0:
-            self.attack_timer = self.stats["attack_cooldown"]
+            self.attack_timer = self.attack_cooldown
             self.has_hit = False
             self.set_state("attack")
             return True
@@ -106,6 +107,10 @@ class EnemyBase:
 
     def move(self, dt):
         distance_to_target = self.target_x - self.rect.centerx
+
+        if abs(distance_to_target) > 500:
+            self.dead = True
+
         self.moving = abs(distance_to_target) > 1
 
         if self.moving:
