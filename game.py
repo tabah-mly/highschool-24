@@ -11,14 +11,35 @@ class Game(GameBase):
 
         self.bg_path = "assets/imgs/bg.png"
 
+        self.initialize()
+
+        self.player = Player(0, 450)
+
     def event_listener(self):
-        pass
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            self.listen(event)
 
     def update(self):
-        pass
+        self.update_game()
+        if self.game_finish:
+            return
+        self.player.update(self.dt)
+        self.player.handle_attack(self.enemies)
+        self.camera.follow(self.player.rect)
+        
 
     def draw(self):
-        pass
+        self.background.draw()
+        self.player.draw(self.screen, self.camera)
 
     def start(self):
-        pass
+        while self.running:
+            self.set_fps()
+            self.event_listener()
+            self.update()
+            self.draw()
+            pygame.display.flip()
+        pygame.quit()
+        sys.exit()
