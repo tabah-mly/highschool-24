@@ -7,7 +7,7 @@ class Enemy(EnemyBase):
         self.animations = {
             "idle": ("assets/imgs/enemy_idle.png", 4, 0.1),
             "walk": ("assets/imgs/enemy_walk.png", 4, 0.1),
-            "attack": ("assets/imgs/enemy_attack.png", 4, 0.5, False),
+            "attack": ("assets/imgs/enemy_attack.png", 4, 0.05, False),
         }
 
         self.stats = {
@@ -23,7 +23,7 @@ class Enemy(EnemyBase):
         self.get_target_x()
         if not self.attack(dt):
             self.move(dt)
-        self.update_sprites()
+        self.update_sprites(dt)
 
     def draw(self, screen, camera):
         self.draw_sprites(screen, camera)
