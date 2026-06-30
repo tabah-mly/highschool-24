@@ -28,7 +28,6 @@ class Game(GameBase):
         self.player.update(self.dt)
         self.player.handle_attack(self.enemies)
         self.camera.follow(self.player.rect)
-        
 
     def draw(self):
         self.background.draw()
@@ -40,6 +39,8 @@ class Game(GameBase):
             self.event_listener()
             self.update()
             self.draw()
+
             pygame.display.flip()
+
         pygame.quit()
         sys.exit()
