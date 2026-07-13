@@ -28,10 +28,13 @@ class Game(GameBase):
         self.player.update(self.dt)
         self.player.handle_attack(self.enemies)
         self.camera.follow(self.player.rect)
+        self.update_enemies()
 
     def draw(self):
         self.background.draw()
         self.player.draw(self.screen, self.camera)
+        self.draw_enemies()
+        self.draw_game()
 
     def start(self):
         while self.running:
